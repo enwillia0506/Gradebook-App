@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList} from 'react-native';
 import firebase from './firebaseConfig';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDoc, docRef, getDocs } from "firebase/firestore";
+
 import { db } from './firebaseConfig';
+import YourComponent from './getData';
+
 
 let gradebook = {
   emily: {
@@ -39,52 +42,127 @@ let gradebook = {
 
 // async function GetData() {
   try {
-    const docRef = addDoc(collection(db, "students"), {
+    // const db = firebase.firestore();
+    await setDoc(doc(db, 'students', 'gradebook'), {
       gradebook: gradebook
     });
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
   }
 // }
-const grades = []
 
+// const grades = []
 export const FirebaseFetcher = () => {
-  const [students, setStudents] = useState([]);
-  useEffect(() => {
-    // const db = firebase.firestore();
-    
-    const fetchData = async () => {
-      const data = await db.collection('students').get();
-      data.docs.forEach(doc => {
-        console.log(doc.data());
-        const { heading, text } = doc.data()
-        grades.push((
-          heading,
-          text
-        ))
-      })
-      setStudents(grades)
-    };
-    fetchData();
-  }, []);
+  const [data, setData] = useState([]);
 
-  return (
-    // <div>
-    //   {/* Your JSX here */}
-    // </div>
-    <View>
-      <FlatList 
-        data={grades}
-        renderItem={({ item }) => (
-          <Text>
-            hello
-          </Text>
-        )}
-      />
-      {/* <Text>Hello</Text> */}
-    </View>
-  );
-};
+useEffect(() => {
+  const fetchData = async function GetData() {
+    const querySnapshot = await getDocs(collection(db, 'students'));
+    const dataArray = querySnapshot.docs.map(doc => doc.data());
+    setData(dataArray);
+    console.log(dataArray)
+  };
+
+  fetchData();
+}, []);
+//   const [data, setData] = useState([]);
+
+//   const fetchData = async () => {
+//         const querySnapshot = await getDocs(collection(db, "students"));
+//         querySnapshot.forEach((doc) => {
+//         console.log(`${doc.id} => ${doc.data()}`)  
+// })
+//         fetchData()
+//       }
+      return (
+            <View>    
+               {/* <FlatList data={students} renderItem={
+        ({ item }) => <GetData  />
+      } /> */}
+              <h1>Z101 Gradebook</h1>
+              <p>Tried for many, many hours to get Firebase data to display on page.</p>
+
+              <h2>Students</h2>
+              <h3>Emily</h3>
+                <p>Grade: 93</p>
+                <p>Absences: 1</p>
+
+              <h3>Leo</h3>
+                <p>Grade: 93</p>
+                <p>Absences: 1</p>
+
+              <h3>Susan</h3>
+                <p>Grade: 93</p>
+                <p>Absences: 1</p>
+              <h3>Lassie</h3>
+
+                <p>Grade: 93</p>
+                <p>Absences: 1</p>
+              <h3>George</h3>
+                <p>Grade: 93</p>
+                <p>Absences: 1</p>
+
+              </View>
+            
+          )
+}
+
+async function GetData() {
+  const docRef = doc(db, "students", "gradebook");
+const docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+} else {
+  // docSnap.data() will be undefined in this case
+  console.log("No such document!");
+}
+
+}
+
+GetData()
+
+
+
+// export const FirebaseFetcher = () => {
+//   const [students, setStudents] = useState([]);
+//   useEffect(() => {
+//     // const db = firebase.firestore();
+    
+    
+//     const fetchData = async () => {
+//       const data = await db.collection('students').get();
+//       data.docs.forEach(doc => {
+//         console.log(doc.data());
+//         const { gradebook, text } = doc.data()
+//         grades.push((
+//           emily,
+//           grade
+//         ))
+//         console.log(grades);
+//       })
+//       setStudents(grades)
+//     };
+//     fetchData();
+//   }, []);
+
+//   return (
+//     // <div>
+//     //   {/* Your JSX here */}
+//     // </div>
+//     <View>
+//       <FlatList 
+//         data={grades}
+//         renderItem={({ item }) => (
+//           <Text>
+//             hello
+//           </Text>
+//         )}
+//       />
+//       {/* <Text>Hello</Text> */}
+//     </View>
+//   );
+// };
 
 

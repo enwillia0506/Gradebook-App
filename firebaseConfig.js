@@ -1,21 +1,18 @@
 import { initializeApp } from "firebase/app";
-// import firebase from "firebase/compat/app";
-// import "firebase/compat/firestore";
-
 import { getFirestore } from "firebase/firestore";
-// import "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID,
+    apiKey: process.env.EXPO_PUBLIC_API_KEY,
+    authDomain: "fir-gradebook-3eb77.firebaseapp.com",
+    projectId: "fir-gradebook-3eb77",
+    storageBucket: "fir-gradebook-3eb77.appspot.com",
+    messagingSenderId: "842705160127",
+    appId: "1:842705160127:web:95352d018a8bddece8830a"
+
 };
 
 const app = initializeApp(firebaseConfig);
-// const app = firebase.initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-// export const db = app.firestore();
+
+
 
